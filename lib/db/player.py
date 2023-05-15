@@ -4,16 +4,13 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-
 class Player(Base):
     __tablename__ = "players"
 
     id = Column(Integer, primary_key=True)
     scoreboards = relationship("Scoreboard", back_populates="player")
-    username = Column(String(50))
+    rooms = relationship("Room", back_populates="player")
+    username = Column(String(16))
     health = Column(Integer, default=100)
-    money = Column(Integer)
-    score = Column(Integer)
+    score = Column(Integer, default=0)
 
-    def __repr__(self):
-        return f"Player(id={self.id}, username='{self.username}', health={self.health}, score={self.score}, money={self.money})"
