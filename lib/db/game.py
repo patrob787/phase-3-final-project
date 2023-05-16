@@ -36,8 +36,8 @@ class Game:
 
         score = 0
         room_attrs = ['room1', 'room2', 'room3', 'room4', 'room5', 'room6', 'room7', 'room8', 'room9']
-        correct_answers = 0
-        for i in range(5):
+
+        for i in range(9):
             query = session.query(self.questions).filter(self.questions.c.score > score).order_by(func.random()).limit(1)
             row = query.first()
             if row is None:
@@ -45,6 +45,7 @@ class Game:
                 break
 
             question, answer, hint, question_score = row.question, row.answer, row.hint, row.score
+            correct_answers = 0
 
             while correct_answers < 5:
                 user_answer = input(question + "\n> ")
@@ -71,10 +72,7 @@ class Game:
                     # check if player is out of health and end the game if they are
                     if player1.health <= 0:
                         print(f"{new_player} is out of health. Game over.")
-                        session.commit()
-                        return
-                    print("Please try again.")
-
+                       
         # update player and scoreboard objects with new score
         player1.score += score
         score1.score += score
