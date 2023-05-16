@@ -9,7 +9,5 @@ class Scoreboard(Base):
     player = relationship("Player", back_populates="scoreboards")
     username = Column(String)
     score = Column(Integer)
-    remaining_health = Column(Integer)
+    games_completed = Column(Integer)
 
-    def __repr__(self):
-        return f"Scoreboard(id={self.id}, player_id={self.player_id}, score={self.score}, username='{self.player.username}')"

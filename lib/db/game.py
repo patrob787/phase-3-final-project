@@ -2,16 +2,22 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from player import Player, Base
 from scoreboard import Scoreboard
+from rooms import Room
 
+new_player = input("Enter your name: ") # get the player's name from input stores in variable
 
-engine = create_engine('sqlite:///game.db', echo=True)
+print(f'Welcome {new_player}!...................................... begin game')
+
+engine = create_engine("sqlite:///game.db", echo=True)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
 # create a new player and scoreboard and link them together
-player1 = Player(username='cake', score=400, money=300)
-score1 = Scoreboard(player=player1, score=player1.score, username=player1.username)
+player1 = Player(username=new_player, score=400, keys=300)
+room1 = Room(player=player1,username=player1.username, room1=True, room2=False, room3=False, room4=False, room5=False, room6=False, room7=False, room8=False, room9=False)
+score1 = Scoreboard(player=player1, score=player1.score, username=player1.username, games_completed=3)
+session.add(room1)
 session.add(player1)
 session.add(score1)
 session.commit()
