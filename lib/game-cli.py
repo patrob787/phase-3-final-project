@@ -10,6 +10,8 @@ session = Session()
 
 if __name__ == '__main__':
 
+    session.query(Player).delete()
+
     input("Hello...and welcome to...")
 
     print("""
@@ -48,12 +50,41 @@ if __name__ == '__main__':
         print(f"{new_player} you have been trapped inside of the CLI.  Your only chance at escaping is to complete a gauntlet of challenges.  There are ?? challenges in total to complete.  You'll have a total of 10 missed-attempts and 3 hints to use at anytime.  If you run out of attempts, the game is lost.  For each room you complete you will recieve points.  For escaping the CLI you will recieve a bonus score!")
         input("Press enter when you are ready to CLI-scape!  Good luck!")
 
-        print("ROOM 1")
-        
-        
+        rooms = session.query(Room).all()
+        i = 0
+       
+        print(f"ROOM {i + 1}")
 
+        
+        print(f"""
+            {rooms[i].body}
+        """)
+            
+        while (i < len(rooms)):
+            
+            input1 = input("Input your answer or ask for a hint with 'hint': ")
+            
+            if input1.lower() == rooms[i].answer.lower():
+                print('Correct!')
+                
+                i += 1
+                
+                if (i == len(rooms)):
+                    print("Good Job!  You CLI-scaped!!")
+                    break
+                else:
+                    print(f"ROOM {i + 1}")
+                    print(f"""
+                    {rooms[i].body}
+                        """) 
+            elif input1 == 'hint':
+                print(f"{rooms[i].hint}")
+            else:
+                print("incorrect!")
+
+        
     else:
-        print("Okay...well, goodluck!")
+        print("Ah well... good luck finding your way home!")
 
 
     # create a new player and scoreboard and link them together

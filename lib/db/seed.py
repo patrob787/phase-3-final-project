@@ -12,22 +12,30 @@ if __name__ == "__main__":
     session.query(Scoreboard).delete()
     session.query(Room).delete()
 
-    # puzzle1 = Room(
-    #     body="M -> N  //  G -> T  //  K -> P  //  C -> ?",
-    #     answer="X",
-    #     hint="Go back to your ABCs",
-    #     points=1000,
-    # )
+    puzzle1 = Room(
+        body="M -> N  //  G -> T  //  K -> P  //  C -> ?",
+        answer="X",
+        hint="Go back to your ABCs",
+        points=1000,
+    )
 
-    # puzzle2 = Room(
-    #     body="I am light as a feather, and can keep it aloft.  Most of the time I am silent and soft.  I am with you always in whispers and song.  The strongest of men can't hold me for long.",
-    #     answer="breath",
-    #     hint="I am invisible but can be seen in the cold",
-    #     points=1000,
-    # )
+    puzzle2 = Room(
+        body="I am light as a feather, and can keep it aloft.  Most of the time I am silent and soft.  I am with you always in whispers and song.  The strongest of men can't hold me for long.",
+        answer="breath",
+        hint="I am invisible but can be seen in the cold",
+        points=1000,
+    )
+
+    puzzle3 = Room(
+        body="What Is The Next Letter In The Progression?  W I T N L I T ?",
+        answer="P",
+        hint="The answer is the title.",
+        points=2000,
+    )
 
 
 
-    # session.add(puzzle1)
-    # session.add(puzzle2)
+    session.add(puzzle1)
+    session.add(puzzle2)
+    session.add(puzzle3)
     session.commit()
