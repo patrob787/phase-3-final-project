@@ -10,53 +10,61 @@ class Player(Base):
     __tablename__ = "players"
 
     id = Column(Integer, primary_key=True)
-    # scoreboards = relationship("Scoreboard", back_populates="player")
-    # rooms = relationship("Room", back_populates="player")
     username = Column(String(16))
-    health = Column(Integer, default=100)
-    score = Column(Integer, default=0)
-
-
-
-class Puzzle(Base):
-    __tablename__ = 'rooms'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50))
-    points = Column(Integer)
-    difficulty = Column(Integer)
-    body = Column(String)
-    answer = Column(String)
-    hint = Column(String)
+    
+    scoreboards = relationship("Scoreboard", back_populates="player")
 
     def __repr__(self):
-        return f"id: {self.id}, {self.name}, difficulty level: {self.level}, Points: {self.points}"
-    
+        return f"id: {self.id}, username: {self.username}"
+
 
 
 class Room(Base):
-    __tablename__='rooms'
+    __tablename__ = 'rooms'
+
     id = Column(Integer, primary_key=True)
-    player_id = Column(Integer, ForeignKey('players.id'))
-    player = relationship("Player", back_populates="rooms")
-    username = Column(String(16))
-    room1 = Column(Boolean, default=None)
-    room2 = Column(Boolean, default=None)
-    room3 = Column(Boolean, default=None)
-    room4 = Column(Boolean, default=None)
-    room5 = Column(Boolean, default=None)
-    room6 = Column(Boolean, default=None)
-    room7 = Column(Boolean, default=None)
-    room8 = Column(Boolean, default=None)
-    room9 = Column(Boolean, default=None)
+    # name = Column(String(50))
+    body = Column(String)
+    answer = Column(String)
+    hint = Column(String)
+    points = Column(Integer)
+    # difficulty = Column(Integer)
+    
+    scoreboards = relationship("Scoreboard", back_populates="rooms")
 
-
+    def __repr__(self):
+        return f"id: {self.id}, A: {self.answer}, Points: {self.points}"
+    
 
 class Scoreboard(Base):
     __tablename__ = 'scoreboards'
+    
     id = Column(Integer, primary_key=True)
     player_id = Column(Integer, ForeignKey('players.id'))
-    player = relationship("Player", back_populates="scoreboards")
-    username = Column(String)
+    room_id = Column(Integer, ForeignKey("rooms.id"))
     score = Column(Integer)
-    games_completed = Column(Integer)
+    # username = Column(String)
+    # games_completed = Column(Integer)
+    
+    player = relationship("Player", back_populates="scoreboards")
+    room = relationship("Room", back_populates="scoreboards")
+
+    def __repr__(self):
+        return f"id: {self.id}, Player: {self.player_id}, Room: {self.room_id}, Room Score: {self.score}"
+
+
+# class Escape(Base):
+#     __tablename__='escapes'
+#     id = Column(Integer, primary_key=True)
+#     player_id = Column(Integer, ForeignKey('players.id'))
+#     player = relationship("Player", back_populates="rooms")
+#     username = Column(String(16))
+#     room1 = Column(Boolean, default=None)
+#     room2 = Column(Boolean, default=None)
+#     room3 = Column(Boolean, default=None)
+#     room4 = Column(Boolean, default=None)
+#     room5 = Column(Boolean, default=None)
+#     room6 = Column(Boolean, default=None)
+#     room7 = Column(Boolean, default=None)
+#     room8 = Column(Boolean, default=None)
+#     room9 = Column(Boolean, default=None)
