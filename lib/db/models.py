@@ -5,49 +5,40 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-
 class Player(Base):
     __tablename__ = "players"
 
     id = Column(Integer, primary_key=True)
     username = Column(String(16))
-    
-    scoreboards = relationship("Scoreboard", back_populates="player")
+    scoreboards = relationship("Scoreboard", back_populates="players")
 
     def __repr__(self):
         return f"id: {self.id}, username: {self.username}"
 
 
-
 class Room(Base):
-    __tablename__ = 'rooms'
+    __tablename__ = "rooms"
 
     id = Column(Integer, primary_key=True)
-    # name = Column(String(50))
     body = Column(String)
     answer = Column(String)
     hint = Column(String)
     points = Column(Integer)
-    # difficulty = Column(Integer)
-    
-    scoreboards = relationship("Scoreboard", back_populates="rooms")
+    roomScoreboards = relationship("Scoreboard", back_populates="rooms")
 
     def __repr__(self):
         return f"id: {self.id}, A: {self.answer}, Points: {self.points}"
-    
+
 
 class Scoreboard(Base):
-    __tablename__ = 'scoreboards'
-    
+    __tablename__ = "scoreboards"
+
     id = Column(Integer, primary_key=True)
-    player_id = Column(Integer, ForeignKey('players.id'))
+    player_id = Column(Integer, ForeignKey("players.id"))
+    players = relationship("Player", back_populates="scoreboards")
     room_id = Column(Integer, ForeignKey("rooms.id"))
+    rooms = relationship("Room", back_populates="roomScoreboards")
     score = Column(Integer)
-    # username = Column(String)
-    # games_completed = Column(Integer)
-    
-    player = relationship("Player", back_populates="scoreboards")
-    room = relationship("Room", back_populates="scoreboards")
 
     def __repr__(self):
         return f"id: {self.id}, Player: {self.player_id}, Room: {self.room_id}, Room Score: {self.score}"
