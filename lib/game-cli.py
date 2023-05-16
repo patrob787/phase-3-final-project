@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Player, Scoreboard, Room, Puzzle,  Base
+from db.models import Player, Scoreboard, Room, Puzzle,  Base
 
 
 new_player = input("Enter your name: ") # get the player's name from input stores in variable
