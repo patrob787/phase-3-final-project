@@ -8,13 +8,13 @@ new_player = input("Enter your name: ") # get the player's name from input store
 
 print(f'Welcome {new_player}!...................................... begin game')
 
-# engine = create_engine("sqlite:///escape_app.db", echo=True)
-# Base.metadata.create_all(engine)
-# Session = sessionmaker(bind=engine)
-# session = Session()
+engine = create_engine("sqlite:///escape_app.db", echo=True)
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 # create a new player and scoreboard and link them together
-# player1 = Player(username=new_player, score=0, health=100)
+
 # room1 = Room(player=player1, username=player1.username, room1=False, room2=False, room3=False, room4=False, room5=False, room6=False, room7=False, room8=False, room9=False)
 # score1 = Scoreboard(player=player1, score=player1.score, username=player1.username, games_completed=0)
 # score = 0

@@ -28,7 +28,7 @@ class Room(Base):
 
     def __repr__(self):
         return f"id: {self.id}, A: {self.answer}, Points: {self.points}"
-
+    
 
 class Scoreboard(Base):
     __tablename__ = "scoreboards"

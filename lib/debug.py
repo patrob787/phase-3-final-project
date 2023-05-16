@@ -1,16 +1,15 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db.models import Base, Player, Puzzle, Scoreboard, Room
+from db.models import Room
+import ipdb;
+
+engine = create_engine("sqlite:///escape_app.db", echo=True)
+Session = sessionmaker(bind=engine)
+session = Session()
+q = session.query(Room.body)
+print(q)
 
 
 
 
-
-
-
-
-
-
-
-
-import ipdb; ipdb.set_trace()
+ipdb.set_trace()
