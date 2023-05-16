@@ -41,6 +41,7 @@ class Scoreboard(Base):
     player_id = Column(Integer, ForeignKey('players.id'))
     room_id = Column(Integer, ForeignKey("rooms.id"))
     score = Column(Integer)
+    # count = Column(Integer)
     
     players = relationship("Player", back_populates="scoreboards")
     rooms = relationship("Room", back_populates="roomScoreboards")
