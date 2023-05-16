@@ -3,6 +3,10 @@ from sqlalchemy.orm import sessionmaker
 from db.models import Player, Scoreboard, Room,  Base
 # from sqlalchemy.sql.expression import func
 
+engine = create_engine("sqlite:///escape_app.db", echo=True)
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 if __name__ == '__main__':
 
@@ -29,24 +33,28 @@ if __name__ == '__main__':
     
     if start_game.lower() == 'y':
         
-        # current_player = Player(name=new_player)
-        # current_player.score = 0
-        # current_player.attempts = 5
-        # current_player.hints = 3
+        current_player = Player(username=new_player)
+        
+        session.add(current_player)
+        session.commit()
+        
+        current_player.score = 0
+        current_player.attempts = 5
+        current_player.hints = 3
+
+        print(f'Score: {current_player.score}, Attempts left: {current_player.attempts}, Hints left:{current_player.hints}')
         
 
         print(f"{new_player} you have been trapped inside of the CLI.  Your only chance at escaping is to complete a gauntlet of challenges.  There are ?? challenges in total to complete.  You'll have a total of 10 missed-attempts and 3 hints to use at anytime.  If you run out of attempts, the game is lost.  For each room you complete you will recieve points.  For escaping the CLI you will recieve a bonus score!")
         input("Press enter when you are ready to CLI-scape!  Good luck!")
+
+        print("ROOM 1")
         
         
 
     else:
         print("Okay...well, goodluck!")
 
-    # engine = create_engine("sqlite:///escape_app.db", echo=True)
-    # Base.metadata.create_all(engine)
-    # Session = sessionmaker(bind=engine)
-    # session = Session()
 
     # create a new player and scoreboard and link them together
     # player1 = Player(username=new_player, score=0, health=100)
@@ -55,10 +63,7 @@ if __name__ == '__main__':
     # score = 0
 
 
-    # session.add(room1)
-    # session.add(player1)
-    # session.add(score1)
-    # session.commit()
+    
 
 
     # for i in range(9):

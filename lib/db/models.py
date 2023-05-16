@@ -12,7 +12,7 @@ class Player(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String(16))
     
-    scoreboards = relationship("Scoreboard", back_populates="player")
+    scoreboards = relationship("Scoreboard", back_populates="players")
 
     def __repr__(self):
         return f"id: {self.id}, username: {self.username}"
@@ -30,7 +30,7 @@ class Room(Base):
     points = Column(Integer)
     # difficulty = Column(Integer)
     
-    scoreboards = relationship("Scoreboard", back_populates="rooms")
+    roomScoreboards = relationship("Scoreboard", back_populates="rooms")
 
     def __repr__(self):
         return f"id: {self.id}, A: {self.answer}, Points: {self.points}"
@@ -46,8 +46,8 @@ class Scoreboard(Base):
     # username = Column(String)
     # games_completed = Column(Integer)
     
-    player = relationship("Player", back_populates="scoreboards")
-    room = relationship("Room", back_populates="scoreboards")
+    players = relationship("Player", back_populates="scoreboards")
+    rooms = relationship("Room", back_populates="roomScoreboards")
 
     def __repr__(self):
         return f"id: {self.id}, Player: {self.player_id}, Room: {self.room_id}, Room Score: {self.score}"
