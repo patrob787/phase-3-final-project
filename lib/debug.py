@@ -9,6 +9,8 @@ session = Session()
 
 
 session.query(Player).delete()
+session.query(Scoreboard).delete()
+
 session.commit()
 
 

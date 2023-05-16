@@ -3,14 +3,14 @@ from sqlalchemy.orm import sessionmaker
 from db.models import Player, Scoreboard, Room,  Base
 # from sqlalchemy.sql.expression import func
 
-engine = create_engine("sqlite:///escape_app.db", echo=True)
+engine = create_engine("sqlite:///escape_app.db", echo=False)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
 if __name__ == '__main__':
 
-    session.query(Player).delete()
+    # session.query(Player).delete()
 
     input("Hello...and welcome to...")
 
@@ -67,83 +67,39 @@ if __name__ == '__main__':
             if input1.lower() == rooms[i].answer.lower():
                 print('Correct!')
                 
-                i += 1
+                current_player.score += rooms[1].points
+
+                new_score_record = Scoreboard(player_id=current_player.id, room_id=rooms[i].id, score=rooms[i].points)
+                session.add(new_score_record)
+                session.commit()
                 
+                i += 1
+
                 if (i == len(rooms)):
                     print("Good Job!  You CLI-scaped!!")
                     break
                 else:
+                    print(f"Your current score is {current_player.score}!")
                     print(f"ROOM {i + 1}")
                     print(f"""
                     {rooms[i].body}
                         """) 
             elif input1 == 'hint':
-                print(f"{rooms[i].hint}")
+                if (current_player.hints > 0):
+                    print(f"{rooms[i].hint}")
+                    current_player.hints -= 1
+                    print(f"You have {current_player.hints} hints left.")
+                else:
+                    print('You have run out of hints.')
             else:
                 print("incorrect!")
+                current_player.attempts -= 1
+                if (current_player.attempts > 0):
+                    print(f"You have {current_player.attempts} guesses left.")
+                else:
+                    print('You have died.  GAMEOVER!')
+                    break
 
         
     else:
         print("Ah well... good luck finding your way home!")
-
-
-    # create a new player and scoreboard and link them together
-    # player1 = Player(username=new_player, score=0, health=100)
-    # room1 = Room(player=player1, username=player1.username, room1=False, room2=False, room3=False, room4=False, room5=False, room6=False, room7=False, room8=False, room9=False)
-    # score1 = Scoreboard(player=player1, score=player1.score, username=player1.username, games_completed=0)
-    # score = 0
-
-
-    
-
-
-    # for i in range(9):
-    #     query = session.query(self.questions).filter(self.questions.c.score > score).order_by(func.random()).limit(1)
-    #     row = query.first()
-    #     if row is None:
-    #         print("No more questions available. Exiting the game.")
-    #         break
-
-    #     question, answer, hint, question_score = row.question, row.answer, row.hint, row.score
-    #     correct_answers = 0
-
-    #     while correct_answers < 5:
-    #         user_answer = input(question + "\n> ")
-    #         if user_answer.lower() == answer.lower():
-    #             score += question_score
-    #             print("\033[32mCorrect! Your score is now", score, "\033[0m")
-                
-    #             # update the room attribute for the question answered correctly
-    #             setattr(room1, room_attrs[i], True)
-    #             session.commit()
-    #             correct_answers += 1
-    #             break
-    #         else:
-    #             player1.health -= 10  # deduct 10 health points for a wrong answer
-    #             print("\033[31mIncorrect.\033[0m Here's a hint: \033[33m" + hint + "\033[0m")
-    #             if player1.health >= 70:
-    #                 color = '\033[32m'
-    #             elif player1.health >= 30:
-    #                 color = '\033[33m'
-    #             else:
-    #                 color = '\033[31m'
-    #             print(f"{color}Incorrect! Your health is now {player1.health}\033[0m")
-    #             # check if player is out of health and end the game if they are
-    #             if player1.health <= 0:
-    #                 print(f"{new_player} is out of health. Game over.")
-    #                 session.commit()
-    #                 return
-    #             print("Please try again.")
-
-
-    #         # update player and scoreboard objects with new score
-    #         player1.score += score
-    #         score1.score += score
-    #         score1.games_completed += sum([getattr(room1, attr) for attr in room_attrs])
-    #         session.commit()
-    #         print("Your final score is", score)
-
-    # # query the scoreboards and join them with the players
-    # scoreboards = session.query(Scoreboard).join(Player).all()
-    # for scoreboard in scoreboards:
-    #     print(scoreboard.player.username, scoreboard.score, scoreboard.username)
