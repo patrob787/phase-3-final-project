@@ -23,12 +23,10 @@ class Room(Base):
     __tablename__ = 'rooms'
 
     id = Column(Integer, primary_key=True)
-    # name = Column(String(50))
     body = Column(String)
     answer = Column(String)
     hint = Column(String)
     points = Column(Integer)
-    # difficulty = Column(Integer)
     
     roomScoreboards = relationship("Scoreboard", back_populates="rooms")
 
@@ -43,8 +41,6 @@ class Scoreboard(Base):
     player_id = Column(Integer, ForeignKey('players.id'))
     room_id = Column(Integer, ForeignKey("rooms.id"))
     score = Column(Integer)
-    # username = Column(String)
-    # games_completed = Column(Integer)
     
     players = relationship("Player", back_populates="scoreboards")
     rooms = relationship("Room", back_populates="roomScoreboards")
