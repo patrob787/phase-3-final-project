@@ -11,6 +11,25 @@ session = Session()
 session.query(Player).delete()
 session.query(Scoreboard).delete()
 
+
+# ned = Player(username="ned")
+# joe = Player(username="joe")
+# patrob = Player(username="patrob")
+
+# session.add(ned)
+# session.add(joe)
+# session.add(patrob)
+
+# all_players = session.query(Player).all()
+# names = [player.username for player in all_players]
+
+# def find_name(name):
+#     if name in names:
+#         x = session.query(Player).filter(Player.username == name).first()
+#         return x
+#     else:
+#         return Player(username=name)
+
 session.commit()
 
 
