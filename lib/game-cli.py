@@ -9,8 +9,6 @@ session = Session()
 
 if __name__ == '__main__':
 
-    # session.query(Player).delete()
-
     input("Hello...and welcome to...")
 
     print("""
@@ -26,13 +24,20 @@ if __name__ == '__main__':
 
     """)
     input("press enter to continue...if you dare.")
+    new_player = ""
 
-    new_player = input("Enter your name: ") # get the player's name from input stores in variable
+    while (len(new_player) == 0 or len(new_player) > 10):
+        new_player = input("Enter your name: ") # get the player's name from input stores in variable
+
+        if 0 < len(new_player) <= 10:
+            break
+        else:
+            print("Username must be between 1 and 10 characters")
 
     print(f'Welcome {new_player}!  Are you ready to begin?')
     start_game = input('Y/n ?: ')
     
-    if start_game.lower() == 'y':
+    if start_game.lower() == 'y' or start_game.lower() == 'yes':
         
         all_players = session.query(Player).all()
         player_names = [player.username for player in all_players]
@@ -55,7 +60,7 @@ if __name__ == '__main__':
 
         print(f"""
         
-        {new_player} you have been trapped inside of the CLI.  Your only chance at escaping is to complete a gauntlet of challenges.  There are NEEDS NUMBER challenges in total to complete.  You'll have a total of 10 missed-attempts and 3 hints to use at anytime.  If you run out of attempts, the game is lost.  For each room you complete you will recieve points.  For escaping the CLI you will recieve a bonus score!
+        Oh no, {new_player}!  You have been trapped inside of the CLI!!  Your only chance at escaping is to complete a gauntlet of challenges.  There are 6 challenges in total you must complete in order to escape.  You'll have 10 missed-guesses and 3 hints to use at anytime.  A hint can only be used once per room.  If you run out of guesses, the game is lost and you will be trapped inside the CLI!!  For each room you complete you will recieve points.  For escaping the CLI you will recieve a bonus score!
         
         """)
         input("Press ENTER when you are ready to CLI-scape!  Good luck!")
@@ -65,22 +70,24 @@ if __name__ == '__main__':
         hint_count = 1
 
         print(f"""
-        ROOM {i + 1}
-        Player: {current_player.username}
-        Score: {current_player.score}
-        Guesses Remaining: {current_player.attempts}
-        Hints Remaining: {current_player.hints}
-        """)
-        
+                    ROOM {i + 1}
+                    Player: {current_player.username}
+                    Score: {current_player.score}
+                    Guesses Remaining: {current_player.attempts}
+                    Hints Remaining: {current_player.hints}
+                    """)
+
+        input("Press ENTER to continue...")
+                    
         print(f"""
-            
-        {rooms[i].body}
+                        
+                    {rooms[i].body}
         
         """)
             
         while (i < len(rooms)):
             
-            input_answer = input("Input your answer or ask for a hint with 'hint': ")
+            input_answer = input("Type your answer or ask for a hint with 'hint': ")
             
             if input_answer.lower() == rooms[i].answer.lower():
                 input(f"Correct!  You get {rooms[i].points} points!  Press ENTER to continue.")
@@ -103,8 +110,18 @@ if __name__ == '__main__':
                 
                 i += 1
 
-                if (i == len(rooms)):
-                    print("Good Job!  You CLI-scaped!!")
+                if (i == 6):
+                    print(f"You CLI-scaped!!  Well Done!  Your final score is {current_player.score}!")
+                    print("Thank you for playing!")
+                    print("""
+  ______   ______   .__   __.   _______ .______          ___   .___________. __    __   __          ___   .___________. __    ______   .__   __.      _______. __  
+ /      | /  __  \  |  \ |  |  /  _____||   _  \        /   \  |           ||  |  |  | |  |        /   \  |           ||  |  /  __  \  |  \ |  |     /       ||  | 
+|  ,----'|  |  |  | |   \|  | |  |  __  |  |_)  |      /  ^  \ `---|  |----`|  |  |  | |  |       /  ^  \ `---|  |----`|  | |  |  |  | |   \|  |    |   (----`|  | 
+|  |     |  |  |  | |  . `  | |  | |_ | |      /      /  /_\  \    |  |     |  |  |  | |  |      /  /_\  \    |  |     |  | |  |  |  | |  . `  |     \   \    |  | 
+|  `----.|  `--'  | |  |\   | |  |__| | |  |\  \----./  _____  \   |  |     |  `--'  | |  `----./  _____  \   |  |     |  | |  `--'  | |  |\   | .----)   |   |__| 
+ \______| \______/  |__| \__|  \______| | _| `._____/__/     \__\  |__|      \______/  |_______/__/     \__\  |__|     |__|  \______/  |__| \__| |_______/    (__) 
+                                                                                            
+                    """)
                     break
                 
                 else:
@@ -118,6 +135,8 @@ if __name__ == '__main__':
                     Hints Remaining: {current_player.hints}
                     """)
 
+                    input("Press ENTER to continue...")
+
                     print(f"""
             
                     {rooms[i].body}
@@ -129,7 +148,6 @@ if __name__ == '__main__':
                     print(f"{rooms[i].hint}")
                     current_player.hints -= 1
                     hint_count = 0
-                    print(f"You have {current_player.hints} hints remaining.")
                 elif (current_player.hints > 0 and hint_count == 0):
                     print("You have already used a hint for this room.")
                 else:
@@ -141,7 +159,21 @@ if __name__ == '__main__':
                 if (current_player.attempts > 0):
                     print(f"You have {current_player.attempts} guesses remaining.")
                 else:
-                    print('You have died.  GAMEOVER!')
+                    print(f"Rats!  You almost made it.  Your final score is {current_player.score}.")
+                    print("""
+ .----------------.  .----------------.  .----------------.  .----------------.   .----------------.  .----------------.  .----------------.  .----------------. 
+| .--------------. || .--------------. || .--------------. || .--------------. | | .--------------. || .--------------. || .--------------. || .--------------. |
+| |    ______    | || |      __      | || | ____    ____ | || |  _________   | | | |     ____     | || | ____   ____  | || |  _________   | || |  _______     | |
+| |  .' ___  |   | || |     /  \     | || ||_   \  /   _|| || | |_   ___  |  | | | |   .'    `.   | || ||_  _| |_  _| | || | |_   ___  |  | || | |_   __ \    | |
+| | / .'   \_|   | || |    / /\ \    | || |  |   \/   |  | || |   | |_  \_|  | | | |  /  .--.  \  | || |  \ \   / /   | || |   | |_  \_|  | || |   | |__) |   | |
+| | | |    ____  | || |   / ____ \   | || |  | |\  /| |  | || |   |  _|  _   | | | |  | |    | |  | || |   \ \ / /    | || |   |  _|  _   | || |   |  __ /    | |
+| | \ `.___]  _| | || | _/ /    \ \_ | || | _| |_\/_| |_ | || |  _| |___/ |  | | | |  \  `--'  /  | || |    \ ' /     | || |  _| |___/ |  | || |  _| |  \ \_  | |
+| |  `._____.'   | || ||____|  |____|| || ||_____||_____|| || | |_________|  | | | |   `.____.'   | || |     \_/      | || | |_________|  | || | |____| |___| | |
+| |              | || |              | || |              | || |              | | | |              | || |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' || '--------------' | | '--------------' || '--------------' || '--------------' || '--------------' |
+ '----------------'  '----------------'  '----------------'  '----------------'   '----------------'  '----------------'  '----------------'  '----------------' 
+
+                    """)
                     break
 
         

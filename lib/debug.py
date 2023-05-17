@@ -8,8 +8,8 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-session.query(Player).delete()
-session.query(Scoreboard).delete()
+# session.query(Player).delete()
+# session.query(Scoreboard).delete()
 
 
 # ned = Player(username="ned")
@@ -30,7 +30,7 @@ session.query(Scoreboard).delete()
 #     else:
 #         return Player(username=name)
 
-session.commit()
+# session.commit()
 
 
 
