@@ -40,14 +40,14 @@ class Scoreboard(Base):
     id = Column(Integer, primary_key=True)
     player_id = Column(Integer, ForeignKey('players.id'))
     room_id = Column(Integer, ForeignKey("rooms.id"))
-    score = Column(Integer)
-    # count = Column(Integer)
+    count = Column(Integer)
+    total_score = Column(Integer)
     
     players = relationship("Player", back_populates="scoreboards")
     rooms = relationship("Room", back_populates="roomScoreboards")
 
     def __repr__(self):
-        return f"id: {self.id}, Player: {self.player_id}, Room: {self.room_id}, Room Score: {self.score}"
+        return f"id: {self.id}, Player: {self.player_id}, Room: {self.room_id}, Count: {self.count}, Room Score: {self.total_score}"
 
 
 # class Escape(Base):

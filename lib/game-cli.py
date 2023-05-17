@@ -62,7 +62,8 @@ if __name__ == '__main__':
 
         rooms = session.query(Room).all()
         i = 0
-       
+        hint_count = 1
+
         print(f"""
         ROOM {i + 1}
         Player: {current_player.username}
@@ -79,16 +80,26 @@ if __name__ == '__main__':
             
         while (i < len(rooms)):
             
-            input1 = input("Input your answer or ask for a hint with 'hint': ")
+            input_answer = input("Input your answer or ask for a hint with 'hint': ")
             
-            if input1.lower() == rooms[i].answer.lower():
+            if input_answer.lower() == rooms[i].answer.lower():
                 input(f"Correct!  You get {rooms[i].points} points!  Press ENTER to continue.")
                 
                 current_player.score += rooms[i].points
 
-                new_score_record = Scoreboard(player_id=current_player.id, room_id=rooms[i].id, score=rooms[i].points)
-                session.add(new_score_record)
-                session.commit()
+                room_records = session.query(Scoreboard).filter(Scoreboard.room_id == rooms[i].id).all()
+                room_player_ids = [record.player_id for record in room_records] 
+
+                if current_player.id in room_player_ids:
+                    update_room_record = session.query(Scoreboard).filter(Scoreboard.player_id == current_player.id, Scoreboard.room_id == rooms[i].id).first()
+                    update_room_record.count += 1
+                    update_room_record.total_score *= update_room_record.count
+                    session.commit()
+                
+                else:
+                    new_room_record = Scoreboard(player_id=current_player.id, room_id=rooms[i].id, count=1, total_score=rooms[i].points)
+                    session.add(new_room_record)
+                    session.commit()
                 
                 i += 1
 
@@ -97,6 +108,8 @@ if __name__ == '__main__':
                     break
                 
                 else:
+                    hint_count = 1
+
                     print(f"""
                     ROOM {i + 1}
                     Player: {current_player.username}
@@ -111,13 +124,16 @@ if __name__ == '__main__':
                     
                     """)
 
-            elif input1 == 'hint':
-                if (current_player.hints > 0):
+            elif input_answer == 'hint':
+                if (current_player.hints > 0 and hint_count == 1):
                     print(f"{rooms[i].hint}")
                     current_player.hints -= 1
+                    hint_count = 0
                     print(f"You have {current_player.hints} hints remaining.")
+                elif (current_player.hints > 0 and hint_count == 0):
+                    print("You have already used a hint for this room.")
                 else:
-                    print('You have run out of hints.')
+                    print("You have run out of hints.")
             
             else:
                 print("incorrect!")
