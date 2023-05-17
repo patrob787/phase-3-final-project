@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db.models import Player, Scoreboard, Room,  Base
-# from sqlalchemy.sql.expression import func
 
 engine = create_engine("sqlite:///escape_app.db", echo=False)
 Base.metadata.create_all(engine)
