@@ -40,23 +40,34 @@ if __name__ == '__main__':
         session.commit()
         
         current_player.score = 0
-        current_player.attempts = 5
+        current_player.attempts = 10
         current_player.hints = 3
 
-        print(f'Score: {current_player.score}, Attempts left: {current_player.attempts}, Hints left:{current_player.hints}')
+        print(f"Player: {current_player.username} // Score: {current_player.score} // Guesses Remaining: {current_player.attempts} // Hints Remaining:{current_player.hints}")
         
 
-        print(f"{new_player} you have been trapped inside of the CLI.  Your only chance at escaping is to complete a gauntlet of challenges.  There are ?? challenges in total to complete.  You'll have a total of 10 missed-attempts and 3 hints to use at anytime.  If you run out of attempts, the game is lost.  For each room you complete you will recieve points.  For escaping the CLI you will recieve a bonus score!")
-        input("Press enter when you are ready to CLI-scape!  Good luck!")
+        print(f"""
+        
+        {new_player} you have been trapped inside of the CLI.  Your only chance at escaping is to complete a gauntlet of challenges.  There are NEEDS NUMBER challenges in total to complete.  You'll have a total of 10 missed-attempts and 3 hints to use at anytime.  If you run out of attempts, the game is lost.  For each room you complete you will recieve points.  For escaping the CLI you will recieve a bonus score!
+        
+        """)
+        input("Press ENTER when you are ready to CLI-scape!  Good luck!")
 
         rooms = session.query(Room).all()
         i = 0
        
-        print(f"ROOM {i + 1}")
-
+        print(f"""
+        ROOM {i + 1}
+        Player: {current_player.username}
+        Score: {current_player.score}
+        Guesses Remaining: {current_player.attempts}
+        Hints Remaining: {current_player.hints}
+        """)
         
         print(f"""
-            {rooms[i].body}
+            
+        {rooms[i].body}
+        
         """)
             
         while (i < len(rooms)):
@@ -64,9 +75,9 @@ if __name__ == '__main__':
             input1 = input("Input your answer or ask for a hint with 'hint': ")
             
             if input1.lower() == rooms[i].answer.lower():
-                print('Correct!')
+                input(f"Correct!  You get {rooms[i].points} points!  Press ENTER to continue.")
                 
-                current_player.score += rooms[1].points
+                current_player.score += rooms[i].points
 
                 new_score_record = Scoreboard(player_id=current_player.id, room_id=rooms[i].id, score=rooms[i].points)
                 session.add(new_score_record)
@@ -77,24 +88,35 @@ if __name__ == '__main__':
                 if (i == len(rooms)):
                     print("Good Job!  You CLI-scaped!!")
                     break
+                
                 else:
-                    print(f"Your current score is {current_player.score}!")
-                    print(f"ROOM {i + 1}")
                     print(f"""
+                    ROOM {i + 1}
+                    Player: {current_player.username}
+                    Score: {current_player.score}
+                    Guesses Remaining: {current_player.attempts}
+                    Hints Remaining: {current_player.hints}
+                    """)
+
+                    print(f"""
+            
                     {rooms[i].body}
-                        """) 
+                    
+                    """)
+
             elif input1 == 'hint':
                 if (current_player.hints > 0):
                     print(f"{rooms[i].hint}")
                     current_player.hints -= 1
-                    print(f"You have {current_player.hints} hints left.")
+                    print(f"You have {current_player.hints} hints remaining.")
                 else:
                     print('You have run out of hints.')
+            
             else:
                 print("incorrect!")
                 current_player.attempts -= 1
                 if (current_player.attempts > 0):
-                    print(f"You have {current_player.attempts} guesses left.")
+                    print(f"You have {current_player.attempts} guesses remaining.")
                 else:
                     print('You have died.  GAMEOVER!')
                     break
