@@ -34,7 +34,14 @@ if __name__ == '__main__':
     
     if start_game.lower() == 'y':
         
-        current_player = Player(username=new_player)
+        all_players = session.query(Player).all()
+        player_names = [player.username for player in all_players]
+
+        if new_player in player_names:
+            current_player = session.query(Player).filter(Player.username == new_player).first()
+        else:
+            current_player = Player(username=new_player)
+       
         
         session.add(current_player)
         session.commit()
