@@ -111,6 +111,7 @@ if __name__ == '__main__':
                 i += 1
 
                 if (i == 6):
+                    current_player.score += 5000
                     print(f"You CLI-scaped!!  Well Done!  Your final score is {current_player.score}!")
                     print("Thank you for playing!")
                     print("""
