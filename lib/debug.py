@@ -33,8 +33,5 @@ session = Session()
 # session.commit()
 
 
-
-
-
-
 import ipdb; ipdb.set_trace()
+session.close()
