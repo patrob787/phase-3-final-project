@@ -1,6 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db.models import Player, Scoreboard, Room,  Base
+from helpers import start_timer
+import time
 
 engine = create_engine("sqlite:///escape_app.db", echo=False)
 Base.metadata.create_all(engine)
@@ -9,7 +11,7 @@ session = Session()
 
 if __name__ == '__main__':
 
-    input("Hello...and welcome to...")
+    input("\033[92mHello...and welcome to...")
 
     print("""
     
@@ -88,14 +90,33 @@ if __name__ == '__main__':
         {rooms[i].body}
         
         """)
+        
+        # set the duration of the timer (in seconds)
+        timer_duration = 60
+        
+        # start the timer
+        time_left = True
+        end_time = start_timer(timer_duration)
+
+         
+        while (time_left) and (i < len(rooms)):
+
+            time_remaining = int(end_time - time.time())
+            if time_remaining < 0:
+                time_left = False
+                break
             
-        while (i < len(rooms)):
+            if time_remaining <= 10:
+                print("\033[31m")  # set the text color to red
+            print(f"Time remaining: {time_remaining} seconds\n")
             
             input_answer = input("Type your answer or ask for a hint with 'hint': ")
+        
+            time_remaining = int(end_time - time.time())
             
-            if input_answer.lower() == rooms[i].answer.lower():
+            if time_remaining > 0 and input_answer.lower() == rooms[i].answer.lower():
                 input(f"Correct!  You get {rooms[i].points} points!  Press ENTER to continue.")
-                
+
                 current_player.score += rooms[i].points
 
                 room_records = session.query(Scoreboard).filter(Scoreboard.room_id == rooms[i].id).all()
@@ -149,7 +170,7 @@ if __name__ == '__main__':
                     """)
 
             elif input_answer == 'hint':
-                if (current_player.hints > 0 and hint_count == 1):
+                if (time_remaining > 0) and (current_player.hints > 0) and (hint_count == 1):
                     print(f"{rooms[i].hint}")
                     current_player.hints -= 1
                     hint_count = 0
@@ -161,11 +182,15 @@ if __name__ == '__main__':
             else:
                 print("incorrect!")
                 current_player.attempts -= 1
-                if (current_player.attempts > 0):
+                if (current_player.attempts > 0) and (time_remaining > 0):
                     print(f"You have {current_player.attempts} guesses remaining.")
                 else:
-                    print("""
- .----------------.  .----------------.  .----------------.  .----------------.   .----------------.  .----------------.  .----------------.  .----------------. 
+                    break
+
+
+        print(f"Rats!  You almost made it.  Your final score is {current_player.score}.")
+        print("""
+.----------------.  .----------------.  .----------------.  .----------------.   .----------------.  .----------------.  .----------------.  .----------------. 
 | .--------------. || .--------------. || .--------------. || .--------------. | | .--------------. || .--------------. || .--------------. || .--------------. |
 | |    ______    | || |      __      | || | ____    ____ | || |  _________   | | | |     ____     | || | ____   ____  | || |  _________   | || |  _______     | |
 | |  .' ___  |   | || |     /  \     | || ||_   \  /   _|| || | |_   ___  |  | | | |   .'    `.   | || ||_  _| |_  _| | || | |_   ___  |  | || | |_   __ \    | |
@@ -175,12 +200,9 @@ if __name__ == '__main__':
 | |  `._____.'   | || ||____|  |____|| || ||_____||_____|| || | |_________|  | | | |   `.____.'   | || |     \_/      | || | |_________|  | || | |____| |___| | |
 | |              | || |              | || |              | || |              | | | |              | || |              | || |              | || |              | |
 | '--------------' || '--------------' || '--------------' || '--------------' | | '--------------' || '--------------' || '--------------' || '--------------' |
- '----------------'  '----------------'  '----------------'  '----------------'   '----------------'  '----------------'  '----------------'  '----------------' 
+'----------------'  '----------------'  '----------------'  '----------------'   '----------------'  '----------------'  '----------------'  '----------------' 
 
-                    """)
-                    print(f"Rats!  You almost made it.  Your final score is {current_player.score}.")
-                    break
+        """)
 
-        
     else:
-        print("Ah well... good luck finding your way home!")
+        print("Ah well... come back soon!")
