@@ -102,3 +102,4 @@ if __name__ == "__main__":
     session.add(room5)
     session.add(room6)
     session.commit()
+    session.close()

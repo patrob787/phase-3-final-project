@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db.models import Player, Scoreboard, Room,  Base
-from helpers import start_timer
+from helpers import start_timer, print_time_remaining, timer_duration
 import time
 
 engine = create_engine("sqlite:///escape_app.db", echo=False)
@@ -11,7 +11,8 @@ session = Session()
 
 if __name__ == '__main__':
 
-    input("\033[92mHello...and welcome to...")
+    print("\033[92m")
+    input("Hello...and welcome to...")
 
     print("""
     
@@ -25,16 +26,16 @@ if __name__ == '__main__':
                                                                               |_|                                      
 
     """)
-    input("press enter to continue...if you dare.")
+    input("press ENTER to continue...if you dare.")
     new_player = ""
 
-    while (len(new_player) == 0 or len(new_player) > 10):
+    while (len(new_player) == 0 or len(new_player) > 15):
         new_player = input("Enter your name: ") # get the player's name from input stores in variable
 
-        if 0 < len(new_player) <= 10:
+        if 0 < len(new_player) <= 15:
             break
         else:
-            print("Username must be between 1 and 10 characters")
+            print("Username must be between 1 and 15 characters")
 
     print(f'Welcome {new_player}!  Are you ready to begin?')
     start_game = input('Y/n ?: ')
@@ -48,22 +49,20 @@ if __name__ == '__main__':
             current_player = session.query(Player).filter(Player.username == new_player).first()
         else:
             current_player = Player(username=new_player)
+            session.add(current_player)
        
-        
-        session.add(current_player)
         session.commit()
         
         current_player.score = 0
         current_player.attempts = 10
         current_player.hints = 3
 
-        
         print(f"""
         
         Oh no, {new_player}!  You have been trapped inside of the CLI!!  
         Your only chance at escaping is to complete a gauntlet of challenges.  
-        There are 6 challenges in total you must finish in order to escape.  
-        You'll have 10 missed-guesses and 3 hints to use at anytime.  A hint can only be used once per room.  
+        There are 6 challenges in total you must finish within 12 minutes in order to escape.  
+        You will have 10 missed-guesses and 3 hints to use at anytime.  A hint can only be used once per room.  
         If you run out of guesses, the game is lost and you will be trapped inside the CLI FOREVER!!  
         For each room you complete you will recieve points.  If you escape the CLI you will recieve a bonus score!
         Good Luck!
@@ -74,6 +73,9 @@ if __name__ == '__main__':
         rooms = session.query(Room).all()
         i = 0
         hint_count = 1
+        
+        # start the timer
+        end_time = start_timer(timer_duration)
 
         print(f"""
         ROOM {i + 1}
@@ -83,6 +85,7 @@ if __name__ == '__main__':
         Hints Remaining: {current_player.hints}
         """)
 
+        print_time_remaining(timer_duration)
         input("Press ENTER to continue...")
                     
         print(f"""
@@ -91,27 +94,18 @@ if __name__ == '__main__':
         
         """)
         
-        # set the duration of the timer (in seconds)
-        timer_duration = 60
-        
-        # start the timer
-        time_left = True
-        end_time = start_timer(timer_duration)
-
-         
-        while (time_left) and (i < len(rooms)):
+        while (i < len(rooms)):
 
             time_remaining = int(end_time - time.time())
+            
             if time_remaining < 0:
-                time_left = False
                 break
-            
-            if time_remaining <= 10:
+            elif time_remaining <= 10:
                 print("\033[31m")  # set the text color to red
-            print(f"Time remaining: {time_remaining} seconds\n")
             
-            input_answer = input("Type your answer or ask for a hint with 'hint': ")
-        
+            
+            input_answer = input("Type your answer, 'hint' for a hint, or 'timeleft' for time remaining: ")
+            
             time_remaining = int(end_time - time.time())
             
             if time_remaining > 0 and input_answer.lower() == rooms[i].answer.lower():
@@ -161,6 +155,7 @@ if __name__ == '__main__':
         Hints Remaining: {current_player.hints}
                     """)
 
+                    print_time_remaining(time_remaining)
                     input("Press ENTER to continue...")
 
                     print(f"""
@@ -171,24 +166,27 @@ if __name__ == '__main__':
 
             elif input_answer == 'hint':
                 if (time_remaining > 0) and (current_player.hints > 0) and (hint_count == 1):
-                    print(f"{rooms[i].hint}")
+                    print(f"{rooms[i].hint}\n")
                     current_player.hints -= 1
                     hint_count = 0
                 elif (current_player.hints > 0 and hint_count == 0):
-                    print("You have already used a hint for this room.")
+                    print("You have already used a hint for this room.\n")
                 else:
-                    print("You have run out of hints.")
+                    print("You have run out of hints.\n")
+            
+            elif input_answer == "timeleft":
+                print_time_remaining(time_remaining)
             
             else:
-                print("incorrect!")
-                current_player.attempts -= 1
                 if (current_player.attempts > 0) and (time_remaining > 0):
-                    print(f"You have {current_player.attempts} guesses remaining.")
+                    print("incorrect!")
+                    current_player.attempts -= 1
+                    print(f"You have {current_player.attempts} guesses remaining.\n")
                 else:
+                    print(f"Rats!  You almost made it.  Your final score is {current_player.score}.")
                     break
 
 
-        print(f"Rats!  You almost made it.  Your final score is {current_player.score}.")
         print("""
 .----------------.  .----------------.  .----------------.  .----------------.   .----------------.  .----------------.  .----------------.  .----------------. 
 | .--------------. || .--------------. || .--------------. || .--------------. | | .--------------. || .--------------. || .--------------. || .--------------. |
@@ -206,3 +204,5 @@ if __name__ == '__main__':
 
     else:
         print("Ah well... come back soon!")
+
+session.close()
