@@ -57,33 +57,37 @@ if __name__ == '__main__':
         current_player.attempts = 10
         current_player.hints = 3
 
-        print(f"Player: {current_player.username} // Score: {current_player.score} // Guesses Remaining: {current_player.attempts} // Hints Remaining:{current_player.hints}")
         
-
         print(f"""
         
-        Oh no, {new_player}!  You have been trapped inside of the CLI!!  Your only chance at escaping is to complete a gauntlet of challenges.  There are 6 challenges in total you must complete in order to escape.  You'll have 10 missed-guesses and 3 hints to use at anytime.  A hint can only be used once per room.  If you run out of guesses, the game is lost and you will be trapped inside the CLI!!  For each room you complete you will recieve points.  For escaping the CLI you will recieve a bonus score!
+        Oh no, {new_player}!  You have been trapped inside of the CLI!!  
+        Your only chance at escaping is to complete a gauntlet of challenges.  
+        There are 6 challenges in total you must finish in order to escape.  
+        You'll have 10 missed-guesses and 3 hints to use at anytime.  A hint can only be used once per room.  
+        If you run out of guesses, the game is lost and you will be trapped inside the CLI FOREVER!!  
+        For each room you complete you will recieve points.  If you escape the CLI you will recieve a bonus score!
+        Good Luck!
         
         """)
-        input("Press ENTER when you are ready to CLI-scape!  Good luck!")
+        input("Press ENTER when you are ready to CLI-SCAPE!")
 
         rooms = session.query(Room).all()
         i = 0
         hint_count = 1
 
         print(f"""
-                    ROOM {i + 1}
-                    Player: {current_player.username}
-                    Score: {current_player.score}
-                    Guesses Remaining: {current_player.attempts}
-                    Hints Remaining: {current_player.hints}
-                    """)
+        ROOM {i + 1}
+        Player: {current_player.username}
+        Score: {current_player.score}
+        Guesses Remaining: {current_player.attempts}
+        Hints Remaining: {current_player.hints}
+        """)
 
         input("Press ENTER to continue...")
                     
         print(f"""
                         
-                    {rooms[i].body}
+        {rooms[i].body}
         
         """)
         
@@ -133,8 +137,6 @@ if __name__ == '__main__':
 
                 if (i == 6):
                     current_player.score += 5000
-                    print(f"You CLI-scaped!!  Well Done!  Your final score is {current_player.score}!")
-                    print("Thank you for playing!")
                     print("""
   ______   ______   .__   __.   _______ .______          ___   .___________. __    __   __          ___   .___________. __    ______   .__   __.      _______. __  
  /      | /  __  \  |  \ |  |  /  _____||   _  \        /   \  |           ||  |  |  | |  |        /   \  |           ||  |  /  __  \  |  \ |  |     /       ||  | 
@@ -144,24 +146,26 @@ if __name__ == '__main__':
  \______| \______/  |__| \__|  \______| | _| `._____/__/     \__\  |__|      \______/  |_______/__/     \__\  |__|     |__|  \______/  |__| \__| |_______/    (__) 
                                                                                             
                     """)
+                    print(f"You CLI-scaped!!  Well Done!  Your final score is {current_player.score}!")
+                    print("Thank you for playing!")
                     break
                 
                 else:
                     hint_count = 1
 
                     print(f"""
-                    ROOM {i + 1}
-                    Player: {current_player.username}
-                    Score: {current_player.score}
-                    Guesses Remaining: {current_player.attempts}
-                    Hints Remaining: {current_player.hints}
+        ROOM {i + 1}
+        Player: {current_player.username}
+        Score: {current_player.score}
+        Guesses Remaining: {current_player.attempts}
+        Hints Remaining: {current_player.hints}
                     """)
 
                     input("Press ENTER to continue...")
 
                     print(f"""
             
-                    {rooms[i].body}
+        {rooms[i].body}
                     
                     """)
 

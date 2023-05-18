@@ -14,7 +14,7 @@ if __name__ == "__main__":
     session.query(Room).delete()
 
     room1 = Room(
-        body="What has hands and a face, but cannot hold anythig or smile?",
+        body="What has hands and a face, but cannot hold anything or smile?",
         answer="clock",
         hint="It cannot speak but it can tell you something.",
         points=1000,
@@ -35,22 +35,42 @@ if __name__ == "__main__":
     )
 
     room4 = Room(
-        body="What Is The Next Letter In The Progression?  W, I, T, N, L, I, T, ?",
+        body="""
+        What Is The Next Letter In The Progression?  
+        
+        W, I, T, N, L, I, T, ?
+        """,
         answer="P",
-        hint="The answer is in the title.",
+        hint="The answer is in the question.",
         points=1500,
     )
 
     room5 = Room(
-        body="Two times 10 like a basket, holds six of us within its casket / but 9 can only make room for four / if muddled by your addition, you must abandon that mission / and contemplate this one admission, 5 also holds within it four but 8 holds five of us and not one more!  What are we?",
+        body="""
+        Two times 10 like a basket, holds six of us within its casket
+        But 9 can only make room for four
+        
+        if muddled by your addition, you must abandon that mission 
+        And contemplate this one admission 
+        
+        5 also holds within it four 
+        But 8 holds five of us and not one more!  
+        
+        What are we?
+        """,
         answer="letters",
         hint="What can you count other than numbers?  Why are some numbers spelled out?",
         points=5000,
     )
     
     room6 = Room(
-        body="""1, 4, 7, 11, 15, 19, 21
-                These numbers are bound in a progression.  When written, it may come into view.  The rule they follow is in question.  What number is next?  No math will do!
+        body="""
+        1, 4, 7, 11, 15, 19, 21
+                
+        These numbers are bound in a progression.  
+        When written, it may come into view.  
+        The rule they follow is in question.  
+        What number is next?  No math will do!
             """,
         answer="24",
         hint="Try writing down the numbers as words.",
