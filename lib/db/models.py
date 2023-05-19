@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base 
 
 Base = declarative_base()
 
@@ -13,6 +13,7 @@ class Player(Base):
     username = Column(String(16))
     
     scoreboards = relationship("Scoreboard", back_populates="players")
+    escapes = relationship("Escape", back_populates="players")
 
     def __repr__(self):
         return f"id: {self.id}, username: {self.username}"
@@ -50,18 +51,17 @@ class Scoreboard(Base):
         return f"id: {self.id}, Player: {self.player_id}, Room: {self.room_id}, Count: {self.count}, Room Score: {self.total_score}"
 
 
-# class Escape(Base):
-#     __tablename__='escapes'
-#     id = Column(Integer, primary_key=True)
-#     player_id = Column(Integer, ForeignKey('players.id'))
-#     player = relationship("Player", back_populates="rooms")
-#     username = Column(String(16))
-#     room1 = Column(Boolean, default=None)
-#     room2 = Column(Boolean, default=None)
-#     room3 = Column(Boolean, default=None)
-#     room4 = Column(Boolean, default=None)
-#     room5 = Column(Boolean, default=None)
-#     room6 = Column(Boolean, default=None)
-#     room7 = Column(Boolean, default=None)
-#     room8 = Column(Boolean, default=None)
-#     room9 = Column(Boolean, default=None)
+class Escape(Base):
+    __tablename__='escapes'
+    
+    id = Column(Integer, primary_key=True)
+    player_id = Column(Integer, ForeignKey('players.id'))
+    rooms_complete = Column(Integer)
+    score = Column(Integer)
+    time = Column(String)
+
+    players = relationship("Player", back_populates="escapes")
+
+    def __repr__(self):
+        return f"id: {self.id}, player: {self.player_id}, rooms completed: {self.rooms_complete}, score: {self.score}, time: {self.time}"
+    

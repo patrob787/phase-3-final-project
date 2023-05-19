@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db.models import Player, Scoreboard, Room,  Base
+from db.models import Player, Scoreboard, Room, Escape, Base
 from helpers import start_timer, print_time_remaining, timer_duration
 import time
 
@@ -186,7 +186,12 @@ if __name__ == '__main__':
                     print(f"Rats!  You almost made it.  Your final score is {current_player.score}.")
                     break
 
-
+        run_time = f"{int((timer_duration - time_remaining)/60)}:{((timer_duration - time_remaining)%60):02d}"
+        escape_run = Escape(player_id=current_player.id, rooms_complete=i, score=current_player.score, time=run_time)
+        
+        session.add(escape_run)
+        session.commit()
+        
         print("""
 .----------------.  .----------------.  .----------------.  .----------------.   .----------------.  .----------------.  .----------------.  .----------------. 
 | .--------------. || .--------------. || .--------------. || .--------------. | | .--------------. || .--------------. || .--------------. || .--------------. |
