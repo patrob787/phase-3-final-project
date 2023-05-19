@@ -9,14 +9,14 @@ if __name__ == "__main__":
     session = Session()
     Base.metadata.create_all(engine)
     
-    session.query(Player).delete()
-    session.query(Scoreboard).delete()
+    # session.query(Player).delete()
+    # session.query(Scoreboard).delete()
     session.query(Room).delete()
 
     room1 = Room(
         body="What has hands and a face, but cannot hold anything or smile?",
         answer="clock",
-        hint="It cannot speak but it can tell you something.",
+        hint="It cannot speak but it can TELL you something.",
         points=1000,
     )
     
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     room3 = Room(
         body="M -> N  //  B -> Y  //  K -> P  //  C -> ?",
         answer="X",
-        hint="Go back to your ABCs",
+        hint="A -> Z: what's the relationship?  No math needed here.",
         points=1500,
     )
 
