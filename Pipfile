@@ -12,3 +12,6 @@ alembic = "*"
 
 [requires]
 python_version = "3.8"
+
+[scripts]
+escape = "python lib/game-cli.py"
