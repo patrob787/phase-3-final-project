@@ -14,4 +14,4 @@ alembic = "*"
 python_version = "3.8"
 
 [scripts]
-escape = "python lib/game-cli.py"
+escape = "python game-cli.py"
