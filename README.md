@@ -18,5 +18,5 @@ The game itself is cleverly executed using a while loop.  Once the timer is star
 
 ## Running the game
 
-Be sure to run 'pipenv install' and 'pipenv shell'.  to seed the database run 'python db/seed.py.  To start the game, change directories to the 'lib' file and enter pipenv run escape into the command line.  You can press 'control + C' to exit the game at anytime.  Enjoy!
+From the root folder run 'pipenv install' and 'pipenv shell' to set up the environment and then change directories to the 'lib' folder.  The database is already initiated so to seed the game run 'python db/seed.py'.  To start the game enter 'pipenv run escape' into the command line.  You can press 'control + C' to exit the game at anytime.  Enjoy!
 
