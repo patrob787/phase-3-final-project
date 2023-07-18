@@ -1,0 +1,5 @@
+#Ignore default SQLite DB
+/db/*.sqlite3
+
+#Ignore db instances and versions
+*.db
