@@ -18,5 +18,5 @@ The game itself is cleverly executed using a while loop.  Once the timer is star
 
 ## Running the game
 
-From the root folder run 'pipenv install' and 'pipenv shell' to set up the environment and then change directories to the 'lib' folder.  The database is already initiated so to seed the game run 'python db/seed.py'.  To start the game enter 'pipenv run escape' into the command line.  You can press 'control + C' to exit the game at anytime.  Enjoy!
+Feel free to fork and clone the repo to your computer.  From the root folder run 'pipenv install' and 'pipenv shell' to set up dependencies and the environment then change directories to the 'lib' folder.  To initiate the database run 'alembic upgrade head' followed by 'python db/seed.py' in the command line.  To start the game enter 'pipenv run escape'!  You can press 'control + C' to exit the game at anytime.  Enjoy!
 
